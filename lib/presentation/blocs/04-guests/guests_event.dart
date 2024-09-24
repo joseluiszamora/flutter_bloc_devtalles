@@ -18,3 +18,15 @@ final class SetCustomFilterEvent extends GuestsEvent {
 
   const SetCustomFilterEvent(this.customFilter);
 }
+
+final class AddGest extends GuestsEvent {
+  final String name;
+
+  const AddGest(this.name);
+}
+
+final class ToggleGuest extends GuestsEvent {
+  final String id;
+
+  const ToggleGuest(this.id);
+}

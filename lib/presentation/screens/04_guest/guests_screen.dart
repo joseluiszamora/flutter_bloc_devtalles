@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc_devtalles/config/config.dart';
 import 'package:flutter_bloc_devtalles/presentation/blocs/04-guests/guests_bloc.dart';
 
 class GuestsScreen extends StatelessWidget {
@@ -14,7 +15,11 @@ class GuestsScreen extends StatelessWidget {
       body: const _TodoView(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          context
+              .read<GuestsBloc>()
+              .add(AddGest(RandomGenerator.getRandomName()));
+        },
       ),
     );
   }
@@ -57,7 +62,9 @@ class _TodoView extends StatelessWidget {
               return SwitchListTile(
                   title: Text(guest.description),
                   value: guest.done,
-                  onChanged: (value) {});
+                  onChanged: (value) {
+                    guestBloc.toggleGuest(guest.id);
+                  });
             },
           ),
         )

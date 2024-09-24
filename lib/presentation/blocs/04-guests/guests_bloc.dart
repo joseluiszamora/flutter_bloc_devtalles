@@ -36,17 +36,43 @@ class GuestsBloc extends Bloc<GuestsEvent, GuestsState> {
     on<SetCustomFilterEvent>((event, emit) {
       emit(state.copyWith(filter: event.customFilter));
     });
+
+    on<AddGest>(_addGuestHandler);
+
+    on<ToggleGuest>(_toggleGuestHandler);
   }
 
   void changeFilter(GuestFilter filter) {
     add(SetCustomFilterEvent(filter));
-    // switch (filter) {
-    //   case GuestFilter.all:
-    //     add(SetAllFilterEvent());
-    //   case GuestFilter.invited:
-    //     add(SetInvitedFilterEvent());
-    //   case GuestFilter.notInvited:
-    //     add(SetNoInvitedFilterEvent());
-    // }
+  }
+
+  void addGuest(String name) {
+    add(AddGest(name));
+  }
+
+  void toggleGuest(String id) {
+    add(ToggleGuest(id));
+  }
+
+  void _addGuestHandler(AddGest event, Emitter<GuestsState> emit) {
+    final newGuest = Todo(
+      id: const Uuid().v4(),
+      description: event.name,
+      completedAt: null,
+    );
+    emit(state.copyWith(guests: [...state.guests, newGuest]));
+  }
+
+  void _toggleGuestHandler(ToggleGuest event, Emitter<GuestsState> emit) {
+    final newGuests = state.guests.map((e) {
+      if (e.id == event.id) {
+        return e.copyWith(
+          completedAt: e.completedAt == null ? DateTime.now() : null,
+        );
+      }
+      return e;
+    }).toList();
+
+    emit(state.copyWith(guests: newGuests));
   }
 }
